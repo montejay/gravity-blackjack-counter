@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gravity Blackjack Counter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f9; }
+    h1 { font-size: 24px; }
+    .card-btn {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+    }
+    .card-btn:active { background-color: #0056b3; }
+    #controls input {
+      padding: 8px;
+      width: 80px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    #output { margin-top: 20px; font-size: 20px; }
+    .reset-btn { background-color: #dc3545; }
+  </style>
+</head>
+<body>
+
+<h1>🎴 Gravity Blackjack Counter</h1>
+
+<div id="card-buttons">
+  <button class="card-btn" onclick="addCard('2')">2</button>
+  <button class="card-btn" onclick="addCard('3')">3</button>
+  <button class="card-btn" onclick="addCard('4')">4</button>
+  <button class="card-btn" onclick="addCard('5')">5</button>
+  <button class="card-btn" onclick="addCard('6')">6</button>
+  <button class="card-btn" onclick="addCard('7')">7</button>
+  <button class="card-btn" onclick="addCard('8')">8</button>
+  <button class="card-btn" onclick="addCard('9')">9</button>
+  <button class="card-btn" onclick="addCard('10')">10</button>
+  <button class="card-btn" onclick="addCard('J')">J</button>
+  <button class="card-btn" onclick="addCard('Q')">Q</button>
+  <button class="card-btn" onclick="addCard('K')">K</button>
+  <button class="card-btn" onclick="addCard('A')">A</button>
+</div>
+
+<div id="controls">
+  <p>Decks Remaining: <input type="number" id="decks" value="4" step="0.5" min="0.5" max="8"></p>
+  <button class="card-btn reset-btn" onclick="resetCount()">🔄 Reset</button>
+</div>
+
+<div id="output">
+  <p>Running Count: <span id="runningCount">0</span></p>
+  <p>True Count: <span id="trueCount">0.00</span></p>
+</div>
+
+<script>
+  let runningCount = 0;
+  const hiLoValues = {
+    '2': 1, '3': 1, '4': 1, '5': 1, '6': 1,
+    '7': 0, '8': 0, '9': 0,
+    '10': -1, 'J': -1, 'Q': -1, 'K': -1, 'A': -1
+  };
+
+  function addCard(card) {
+    runningCount += hiLoValues[card];
+    updateDisplay();
+    if (Math.abs(runningCount) >= 4) {
+      navigator.vibrate?.(100);
+    }
+  }
+
+  function updateDisplay() {
+    document.getElementById("runningCount").textContent = runningCount;
+    let decks = parseFloat(document.getElementById("decks").value);
+    let trueCount = decks > 0 ? (runningCount / decks).toFixed(2) : "0.00";
+    document.getElementById("trueCount").textContent = trueCount;
+  }
+
+  function resetCount() {
+    runningCount = 0;
+    updateDisplay();
+  }
+</script>
+
+</body>
+</html>
